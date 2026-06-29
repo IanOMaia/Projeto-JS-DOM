@@ -1,1 +1,101 @@
+body {
+    background-color: #121214;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#painel-status {
+    display: flex;
+    gap: 20px;
+    background: #202024;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid #ffcc00; /* Cor amarela estilo herói */
+}
+
+#arena-jogo {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    height: 450px;
+    background: #1a1a1e;
+    border-radius: 12px;
+    border: 4px solid #29292e;
+    overflow: hidden;
+}
+
+.tela-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(18, 18, 20, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+input, button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+}
+
+button {
+    background-color: #ffcc00;
+    color: #121214;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+#grid-tabuleiro {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.janela-predio {
+    background-color: #29292e;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.1s;
+    position: relative;
+}
+
+/* Estado: Quando o Vilão aparece (Ex: Coringa/Charada) */
+.janela-predio.vilao {
+    background-color: #7b2cbf; /* Roxo */
+    border: 3px solid #38b000; /* Verde Neon */
+}
+
+/* Estado: Quando o Refém aparece (Alvo falso / Armadilha) */
+.janela-predio.refem {
+    background-color: #023e8a; /* Azul Escuro */
+    border: 3px solid #ffd166; /* Amarelo Alerta */
+}
+
+.escondido {
+    display: none !important;
+}
 
