@@ -103,8 +103,8 @@ h1 {
 }
 
 .bloco.ativo.refem {
-    background-color: #33ff33; /* Janela fica verde indicando aliado! */
-    box-shadow: inset 0 0 20px #009900, 0 0 15px #33ff33;
+    background-color: #3399ff; /* Janela fica azul indicando aliado/inocente! */
+    box-shadow: inset 0 0 20px #0044cc, 0 0 15px #3399ff;
 }
 
 /* Botões e Inputs */
