@@ -139,13 +139,62 @@ function finalizarJogo() {
     telaFim.classList.remove('escondido');
 }
 
-// Event Listeners dos Botões principais
-if (btnIniciar) btnIniciar.addEventListener('click', iniciarJogo);
+// ==========================================
+// CONTROLADORES DE FLUXO DA TELA INICIAL
+// ==========================================
+
+const btnAvancar = document.getElementById('btn-avancar');
+const etapaRegistro = document.getElementById('etapa-registro');
+const etapaManual = document.getElementById('etapa-manual');
+
+// Evento do botão "Avançar" (Valida o nome e mostra o manual)
+if (btnAvancar) {
+    btnAvancar.addEventListener('click', () => {
+        const nome = inputNomeJogador.value.trim();
+        if (nome === '') {
+            alert("Por favor, herói, digite seu codinome antes de iniciar a missão!");
+            return;
+        }
+        
+        // Esconde a parte do nome e mostra o manual de instruções
+        etapaRegistro.style.display = 'none';
+        etapaManual.style.display = 'block';
+    });
+}
+
+// Event Listeners dos Botões principais de início e reinício
+if (btnIniciar) {
+    btnIniciar.addEventListener('click', () => {
+        // Pega o tempo selecionado pelo usuário
+        const seletorTempo = document.getElementById('tempo-jogo');
+        tempoRestante = parseInt(seletorTempo.value) || 30;
+
+        // Configura o estado inicial
+        elementoNomeExibido.textContent = inputNomeJogador.value.trim();
+        pontuacao = 0;
+        elementoPontuacao.textContent = pontuacao;
+        elementoCronometro.textContent = tempoRestante;
+        jogoRodando = true;
+
+        // Esconde toda a tela inicial e exibe o tabuleiro
+        telaInicial.classList.add('escondido');
+        gridTabuleiro.classList.remove('escondido');
+
+        // Inicializa o jogo de fato
+        criarGrid();
+        iniciarCronometro();
+        jogoContinua();
+    });
+}
 
 if (btnReiniciar) {
     btnReiniciar.addEventListener('click', () => {
         telaFim.classList.add('escondido');
         telaInicial.classList.remove('escondido');
+        
+        // Reseta o fluxo da tela inicial para a etapa 1 ao reiniciar
+        etapaManual.style.display = 'none';
+        etapaRegistro.style.display = 'block';
         inputNomeJogador.value = '';
     });
 }
