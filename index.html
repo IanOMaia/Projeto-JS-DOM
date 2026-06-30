@@ -1,1 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gotham Crisis - Jogo DOM</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Gotham Crisis 🦇</h1>
+        <div id="painel-status">
+            <p>Herói: <span id="nome-exibido">---</span></p>
+            <p>Pontos: <span id="pontuacao">0</span></p>
+            <p>Tempo: <span id="cronometro">30</span>s</p>
+        </div>
+    </header>
+
+    <main id="arena-jogo">
+        <div id="tela-inicial" class="tela-overlay">
+            <h2>Invasão em Gotham</h2>
+            <input type="text" id="nome-jogador" placeholder="Seu Codinome de Herói" maxlength="15">
+            <button id="btn-iniciar">Iniciar Missão</button>
+        </div>
+
+        <div id="grid-tabuleiro" class="escondido"></div>
+
+        <div id="tela-fim" class="tela-overlay escondido">
+            <h2>Missão Encerrada!</h2>
+            <p>Vilões derrotados. Pontuação final: <span id="pontuacao-final">0</span></p>
+            <button id="btn-reiniciar">Jogar Novamente</button>
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
 
