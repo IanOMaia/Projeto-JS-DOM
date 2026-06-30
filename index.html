@@ -21,10 +21,22 @@
     <main id="arena-jogo">
         <!-- Tela Inicial: Pede o nome do jogador -->
         <div id="tela-inicial" class="tela-overlay">
-            <h2>Invasão em Gotham</h2>
-            <input type="text" id="nome-jogador" placeholder="Seu Codinome de Herói" maxlength="15">
-            <button id="btn-iniciar">Iniciar Missão</button>
-        </div>
+    <h2>Invasão em Gotham</h2>
+    
+    <input type="text" id="nome-jogador" placeholder="Seu Codinome de Herói" maxlength="15">
+    
+    <div style="margin: 10px 0; text-align: center;">
+        <label for="tempo-jogo" style="display: block; margin-bottom: 5px; font-size: 0.9em; color: #ffcc00;">Duração da Missão:</label>
+        <select id="tempo-jogo" style="padding: 10px; border-radius: 5px; border: 1px solid #ffcc00; background: #333; color: white; width: 100%;">
+            <option value="15">15 segundos (Rápido)</option>
+            <option value="30" selected>30 segundos (Normal)</option>
+            <option value="60">60 segundos (Longo)</option>
+        </select>
+    </div>
+
+    <button id="btn-iniciar">Iniciar Missão</button>
+</div>
+
 
         <!-- Grid vazio que receberá as 9 janelas geradas pelo JavaScript -->
         <div id="grid-tabuleiro" class="escondido"></div>
