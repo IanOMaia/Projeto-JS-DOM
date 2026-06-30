@@ -19,20 +19,41 @@
     </header>
 
     <main id="arena-jogo">
-        <!-- Tela Inicial: Pede o nome do jogador -->
-        <div id="tela-inicial" class="tela-overlay">
-    <h2>Invasão em Gotham</h2>
+               <!-- Tela Inicial: Fluxo de Nome -> Manual -> Jogo -->
+<div id="tela-inicial" class="tela-overlay" style="padding: 20px; text-align: center; box-sizing: border-box;">
     
-    <input type="text" id="nome-jogador" placeholder="Seu Codinome de Herói" maxlength="15">
-    
-    <div style="margin: 10px 0; text-align: center;">
-        <label for="tempo-jogo" style="display: block; margin-bottom: 5px; font-size: 0.9em; color: #ffcc00;">Duração da Missão:</label>
-        <select id="tempo-jogo" style="padding: 10px; border-radius: 5px; border: 1px solid #ffcc00; background: #333; color: white; width: 100%;">
-            <option value="15">15 segundos (Rápido)</option>
-            <option value="30" selected>30 segundos (Normal)</option>
-            <option value="60">60 segundos (Longo)</option>
-        </select>
+    <!-- ETAPA 1: Identificação do Jogador -->
+    <div id="etapa-registro" style="width: 100%;">
+        <h2>Invasão em Gotham</h2>
+        <input type="text" id="nome-jogador" placeholder="Seu Codinome de Herói" maxlength="15" style="width: 100%; box-sizing: border-box;">
+        
+        <div style="margin: 15px 0; text-align: center; width: 100%;">
+            <label for="tempo-jogo" style="display: block; margin-bottom: 5px; font-size: 0.9em; color: #ffcc00;">Duração da Missão:</label>
+            <select id="tempo-jogo" style="padding: 10px; border-radius: 5px; border: 1px solid #ffcc00; background: #333; color: white; width: 100%; box-sizing: border-box;">
+                <option value="15">15 segundos (Rápido)</option>
+                <option value="30" selected>30 segundos (Normal)</option>
+                <option value="60">60 segundos (Longo)</option>
+            </select>
+        </div>
+        <button id="btn-avancar" style="width: 100%; margin-top: 10px;">Avançar</button>
     </div>
+
+    <!-- ETAPA 2: Mini Manual (Começa escondido via display: none) -->
+    <div id="etapa-manual" style="display: none; width: 100%;">
+        <h2>Manual da Missão</h2>
+        <div style="background: #1a1a1e; border: 2px solid #ffcc00; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: left; font-size: 0.85em; box-sizing: border-box;">
+            <p style="color: #ffcc00; font-weight: bold; margin-top: 0; text-align: center; font-size: 1.1em;">Como Jogar 🦇</p>
+            <ul style="margin: 0; padding-left: 20px; color: #e1e1e6; line-height: 1.5;">
+                <li>As janelas do prédio vão acender aleatoriamente.</li>
+                <li>Quando a janela piscar <span style="color: #ff3333; font-weight: bold;">VERMELHA</span>: É um vilão! Clique rápido para derrotá-lo e ganhar <span style="color: #00ff00;">+10 pontos</span>.</li>
+                <li>Quando a janela piscar <span style="color: #3399ff; font-weight: bold;">AZUL</span>: É um refém inocente! <span style="color: #ff3333; font-weight: bold;">NÃO CLIQUE</span>, ou perderá <span style="color: #ff3333;">-5 pontos</span>.</li>
+                <li>Seu objetivo é fazer o máximo de pontos antes do tempo acabar.</li>
+            </ul>
+        </div>
+        <button id="btn-iniciar" style="width: 100%;">Prosseguir para o Jogo</button>
+    </div>
+
+</div>
 
     <button id="btn-iniciar">Iniciar Missão</button>
 </div>
