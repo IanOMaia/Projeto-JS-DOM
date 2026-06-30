@@ -46,9 +46,12 @@ function iniciarJogo() {
         return;
     }
 
+    // --- NOVIDADE: Pega o tempo selecionado pelo usuário ---
+    const seletorTempo = document.getElementById('tempo-jogo');
+    tempoRestante = parseInt(seletorTempo.value) || 30; // Se der erro, assume 30s por segurança
+
     // Reseta dados e atualiza interface
     elementoNomeExibido.textContent = nome;
-    tempoRestante = 30;
     pontuacao = 0;
     elementoPontuacao.textContent = pontuacao;
     elementoCronometro.textContent = tempoRestante;
