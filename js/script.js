@@ -1,151 +1,131 @@
 // ==========================================
-// ESTADO DO JOGO (Variáveis de Controle)
+// JS COMPLETO - GOTHAM CRISIS (VERSÃO ATUALIZADA)
 // ==========================================
-let pontuacao = 0;
-let tempoRestante = 30;
-let portaAtivaId = null;
-let jogoRodando = false;
-let loopJogo = null;
-let loopCronometro = null;
-let tempoSpawn = 1000; // Começa com 1 segundo
 
-// Elementos do DOM recuperados
-const elementoPontuacao = document.getElementById('pontuacao');
+// Variáveis de Controle do Estado do Jogo
+let tempoRestante = 30; 
+let pontuacao = 0;
+let loopJogo;
+let loopCronometro;
+let jogoRodando = false;
+
+// Referências diretas dos elementos do HTML (DOM)
 const elementoCronometro = document.getElementById('cronometro');
+const elementoPontuacao = document.getElementById('pontuacao');
 const elementoNomeExibido = document.getElementById('nome-exibido');
 const gridTabuleiro = document.getElementById('grid-tabuleiro');
+const inputNomeJogador = document.getElementById('nome-jogador');
 const telaInicial = document.getElementById('tela-inicial');
 const telaFim = document.getElementById('tela-fim');
 
-// ==========================================
-// FUNÇÕES DE RESPONSABILIDADE ÚNICA
-// ==========================================
+const btnIniciar = document.getElementById('btn-iniciar');
+const btnReiniciar = document.getElementById('btn-reiniciar');
 
-// Função que cria o tabuleiro dinamicamente usando métodos do DOM
-function gerarGrid() {
-    gridTabuleiro.textContent = ''; // Limpa o grid de forma segura
+// FUNÇÃO CRITICAL: Injeta os 9 blocos (janelas) dentro da div do tabuleiro
+function criarGrid() {
+    if (!gridTabuleiro) return; // Proteção caso o elemento não exista
     
-    // Crio um grid 3x3 (9 portas/janelas)
+    gridTabuleiro.innerHTML = ''; // Limpa qualquer resíduo anterior
+    
     for (let i = 0; i < 9; i++) {
-        const janela = document.createElement('div');
-        janela.classList.add('janela-predio');
-        
-        // Uso o dataset para mapear o ID de cada janela sem poluir o HTML
-        janela.dataset.id = i;
-        
-        // Ouvinte de clique para interceptar a ação do jogador
-        janela.addEventListener('click', processarClique);
-        
-        gridTabuleiro.appendChild(janela);
+        const bloco = document.createElement('div');
+        bloco.classList.add('bloco');
+        bloco.dataset.id = i; 
+        bloco.addEventListener('click', clicouNoBloco);
+        gridTabuleiro.appendChild(bloco);
     }
 }
 
-// Inicializa os estados e dispara os cronômetros
+// Inicia a partida e gerencia o fluxo de telas
 function iniciarJogo() {
-    const nomeInput = document.getElementById('nome-jogador').value.trim();
-    if (!nomeInput) {
-        alert("Por favor, digite seu codinome de herói!");
+    const nome = inputNomeJogador.value.trim();
+    
+    // Validação obrigatória do nome do jogador
+    if (nome === '') {
+        alert("Por favor, herói, digite seu codinome antes de iniciar a missão!");
         return;
     }
 
-    // Configuração inicial do estado
-    pontuacao = 0;
+    // Reseta dados e atualiza interface
+    elementoNomeExibido.textContent = nome;
     tempoRestante = 30;
-    tempoSpawn = 1000;
-    jogoRodando = true;
-    elementoNomeExibido.textContent = nomeInput;
+    pontuacao = 0;
     elementoPontuacao.textContent = pontuacao;
     elementoCronometro.textContent = tempoRestante;
+    jogoRodando = true;
 
-    // Transição de telas alterando classes CSS
+    // Transição de Telas (Esconde inicial, mostra tabuleiro)
     telaInicial.classList.add('escondido');
-    telaFim.classList.add('escondido');
     gridTabuleiro.classList.remove('escondido');
 
-    gerarGrid();
-    
-    // Inicia os loops do jogo
-    loopCronometro = setInterval(atualizarTempo, 1000);
-    agendarProximoVilao();
+    // Executa a criação das janelas e os cronômetros
+    criarGrid();
+    iniciarCronometro();
+    jogoContinua();
 }
 
-// Controla o surgimento aleatório dos alvos
-function spawnAlvo() {
+// Controla o surgimento aleatório dos alvos nas janelas
+function jogoContinua() {
     if (!jogoRodando) return;
 
-    // Remove classes antigas de todas as janelas
-    const janelas = document.querySelectorAll('.janela-predio');
-    janelas.forEach(j => {
-        j.classList.remove('vilao', 'refem');
-    });
+    // Remove os estados ativos das janelas do turno anterior
+    const blocoAtivo = document.querySelector('.bloco.ativo');
+    if (blocoAtivo) {
+        blocoAtivo.classList.remove('ativo', 'vilao', 'refem');
+    }
 
-    // Escolhe uma janela aleatória
-    const indiceAleatorio = Math.floor(Math.random() * janelas.length);
-    const janelaSelecionada = janelas[indiceAleatorio];
-    portaAtivaId = indiceAleatorio;
+    const readinessBlocos = document.querySelectorAll('.bloco');
+    if (readinessBlocos.length === 0) return; // Segurança
 
-    // Decisão Hardcore: 25% de chance de gerar um refém (armadilha)
-    const sorteioTipo = Math.random();
-    if (sorteioTipo > 0.75) {
-        janelaSelecionada.classList.add('refem');
-        janelaSelecionada.dataset.tipo = 'refem';
+    // Sorteia uma das 9 janelas (0 a 8)
+    const indiceAleatorio = Math.floor(Math.random() * readinessBlocos.length);
+    const blocoSorteado = readinessBlocos[indiceAleatorio];
+
+    blocoSorteado.classList.add('ativo');
+
+    // Sorteio: 70% de chance de ser Vilão, 30% de ser Refém
+    if (Math.random() < 0.7) {
+        blocoSorteado.classList.add('vilao');
     } else {
-        janelaSelecionada.classList.add('vilao');
-        janelaSelecionada.dataset.tipo = 'vilao';
+        blocoSorteado.classList.add('refem');
     }
 
-    // Curva de dificuldade: acelera o spawn ligeiramente a cada ciclo
-    if (tempoSpawn > 400) {
-        tempoSpawn -= 15; 
-    }
-
-    agendarProximoVilao();
+    // Loop de tempo (900 milissegundos para cada alteração de janela)
+    loopJogo = setTimeout(jogoContinua, 900);
 }
 
-// Agenda o próximo spawn usando timeouts dinâmicos para aplicar a curva de dificuldade
-function agendarProximoVilao() {
-    if (loopJogo) clearTimeout(loopJogo);
-    loopJogo = setTimeout(spawnAlvo, tempoSpawn);
-}
-
-// Trata a pontuação e penalidades baseadas no clique do usuário
-function processarClique(evento) {
+// Processa o clique do jogador nas janelas acesas
+function clicouNoBloco(event) {
     if (!jogoRodando) return;
 
-    const janelaClicada = evento.currentTarget;
-    const tipoAlvo = janelaClicada.dataset.tipo;
+    const blocoClicado = event.currentTarget;
 
-    // Verifica se a janela clicada continha algum elemento ativo
-    if (janelaClicada.classList.contains('vilao')) {
+    if (blocoClicado.classList.contains('vilao')) {
         pontuacao += 10;
-        janelaClicada.classList.remove('vilao');
-        delete janelaClicada.dataset.tipo;
-    } else if (janelaClicada.classList.contains('refem')) {
-        // Penalidade Hardcore: Clicou no refém perde pontos e 3 segundos de tempo!
-        pontuacao = Math.max(0, pontuacao - 15);
-        tempoRestante = Math.max(0, tempoRestante - 3);
+        // Limpa o bloco imediatamente após o acerto (feedback rápido)
+        blocoClicado.classList.remove('ativo', 'vilao');
+    } else if (blocoClicado.classList.contains('refem')) {
+        pontuacao -= 5;
+        alert("💥 Cuidado! Você atingiu um refém inocente!");
+        blocoClicado.classList.remove('ativo', 'refem');
+    }
+
+    elementoPontuacao.textContent = pontuacao;
+}
+
+// Gerencia o tempo regressivo de 30 segundos
+function iniciarCronometro() {
+    loopCronometro = setInterval(() => {
+        tempoRestante--;
         elementoCronometro.textContent = tempoRestante;
-        janelaClicada.classList.remove('refem');
-        delete janelaClicada.dataset.tipo;
-    } else {
-        // Clicou na janela vazia (erro de mira)
-        pontuacao = Math.max(0, pontuacao - 2);
-    }
-
-    elementoPontuacao.getElementById ? null : elementoPontuacao.textContent = pontuacao;
+        
+        if (tempoRestante <= 0) {
+            finalizarJogo();
+        }
+    }, 1000);
 }
 
-// Deduz o tempo e verifica a condição de término
-function atualizarTempo() {
-    tempoRestante--;
-    elementoCronometro.textContent = tempoRestante;
-
-    if (tempoRestante <= 0) {
-        finalizarJogo();
-    }
-}
-
-// Encerra a partida e exibe os resultados
+// Encerra os loops e exibe a tela de Game Over
 function finalizarJogo() {
     jogoRodando = false;
     clearInterval(loopCronometro);
@@ -156,9 +136,13 @@ function finalizarJogo() {
     telaFim.classList.remove('escondido');
 }
 
-// ==========================================
-// EVENT LISTENERS DE INTERFACE
-// ==========================================
-document.getElementById('btn-iniciar').addEventListener('click', iniciarJogo);
-document.getElementById('btn-reiniciar').addEventListener('click', iniciarJogo);
+// Event Listeners dos Botões principais
+if (btnIniciar) btnIniciar.addEventListener('click', iniciarJogo);
 
+if (btnReiniciar) {
+    btnReiniciar.addEventListener('click', () => {
+        telaFim.classList.add('escondido');
+        telaInicial.classList.remove('escondido');
+        inputNomeJogador.value = '';
+    });
+}
