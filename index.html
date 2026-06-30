@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gotham Crisis - Jogo DOM</title>
+    <!-- Conexão correta com a pasta css -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -18,22 +19,28 @@
     </header>
 
     <main id="arena-jogo">
+        <!-- Tela Inicial: Pede o nome do jogador -->
         <div id="tela-inicial" class="tela-overlay">
             <h2>Invasão em Gotham</h2>
             <input type="text" id="nome-jogador" placeholder="Seu Codinome de Herói" maxlength="15">
             <button id="btn-iniciar">Iniciar Missão</button>
         </div>
 
+        <!-- Grid vazio que receberá as 9 janelas geradas pelo JavaScript -->
         <div id="grid-tabuleiro" class="escondido"></div>
 
+        <!-- Tela de Game Over -->
         <div id="tela-fim" class="tela-overlay escondido">
             <h2>Missão Encerrada!</h2>
-            <p>Vilões derrotados. Pontuação final: <span id="pontuacao-final">0</span></p>
+            <p>Vilões derrotados. Sua pontuação final: <span id="pontuacao-final">0</span></p>
             <button id="btn-reiniciar">Jogar Novamente</button>
         </div>
     </main>
 
+    <!-- Conexão correta com a pasta js -->
     <script src="js/script.js"></script>
+</body>
+</html>
 </body>
 </html>
 
